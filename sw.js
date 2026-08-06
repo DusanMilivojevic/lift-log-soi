@@ -1,4 +1,4 @@
-const CACHE="lift-log-soi-v5";
+const CACHE="lift-log-soi-v6";
 const APP_SHELL=new URL("./",self.registration.scope).href;
 const PRECACHE=[APP_SHELL,new URL("manifest.webmanifest",self.registration.scope).href,new URL("exercise-form-sprite.png",self.registration.scope).href];
 
@@ -17,6 +17,22 @@ self.addEventListener("activate",event=>{
 
 self.addEventListener("fetch",event=>{
   if(event.request.method!=="GET")return;
+
+  if(event.request.mode==="navigate"){
+    event.respondWith(
+      fetch(event.request)
+        .then(response=>{
+          if(response.ok&&!response.redirected&&response.type==="basic"){
+            const copy=response.clone();
+            event.waitUntil(caches.open(CACHE).then(cache=>cache.put(APP_SHELL,copy)));
+          }
+          return response;
+        })
+        .catch(()=>caches.match(APP_SHELL))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{
       if(response.ok&&!response.redirected&&response.type==="basic"){
@@ -24,6 +40,6 @@ self.addEventListener("fetch",event=>{
         event.waitUntil(caches.open(CACHE).then(cache=>cache.put(event.request,copy)));
       }
       return response;
-    }).catch(()=>event.request.mode==="navigate"?caches.match(APP_SHELL):undefined))
+    }))
   );
 });
