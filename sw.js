@@ -1,6 +1,6 @@
-const CACHE="lift-log-soi-v4";
+const CACHE="lift-log-soi-v5";
 const APP_SHELL=new URL("./",self.registration.scope).href;
-const PRECACHE=[APP_SHELL,new URL("manifest.webmanifest",self.registration.scope).href];
+const PRECACHE=[APP_SHELL,new URL("manifest.webmanifest",self.registration.scope).href,new URL("exercise-form-sprite.png",self.registration.scope).href];
 
 self.addEventListener("install",event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(PRECACHE)));
