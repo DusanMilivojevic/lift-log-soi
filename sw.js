@@ -1,4 +1,4 @@
-const CACHE="lift-log-soi-v6";
+const CACHE="lift-log-soi-v7";
 const APP_SHELL=new URL("./",self.registration.scope).href;
 const PRECACHE=[APP_SHELL,new URL("manifest.webmanifest",self.registration.scope).href,new URL("exercise-form-sprite.png",self.registration.scope).href];
 
